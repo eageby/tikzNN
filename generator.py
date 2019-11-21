@@ -62,5 +62,6 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
 def network(layer_widths, directory, **kwargs):
     os.makedirs(directory, exist_ok=True)
 
-    vertices(layer_widths, directory, **kwargs)
-    edges(layer_widths, directory, **kwargs)
+    if layer_widths:
+        vertices(layer_widths, directory, **kwargs)
+        edges(layer_widths, directory, **kwargs)
