@@ -60,8 +60,7 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
 @click.option("--y_separation", "-y", default=1.5, type=float)
 @click.option("--neuron_connections", "-c", type=int)
 def network(layer_widths, directory, **kwargs):
-    os.makedirs(directory, exist_ok=True)
-
     if layer_widths:
+        os.makedirs(directory, exist_ok=True)
         vertices(layer_widths, directory, **kwargs)
         edges(layer_widths, directory, **kwargs)
