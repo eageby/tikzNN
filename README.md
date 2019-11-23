@@ -27,8 +27,8 @@ Compilation of that file will render a visualization.
 ## Separation
 The interface provides options for customizing the distance between layers (x) and nodes (y).
 ```bash
- -x, --x_separation FLOAT
- -y, --y_separation FLOAT
+ -x, --layer_separation FLOAT
+ -y, --node_separation FLOAT
  
 ```
 # Installation
