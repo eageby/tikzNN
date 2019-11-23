@@ -5,11 +5,13 @@ import os
 import click
 import numpy as np
 
-def normalize(layer_widths):
-    return list((layer_widths - np.max(layer_widths)) / 2) 
-def vertices(layer_widths, directory, x_separation=2, y_separation=1.5, **kwargs):
-    normalizing_width = normalize(layer_widths)
 
+def normalize(layer_widths):
+    return list((layer_widths - np.max(layer_widths)) / 2)
+
+
+def vertices(layer_widths, directory, x_separation=2, y_separation=1.5, **kwargs):
+    normalizing_width = normalize(layer_widths) 
     with open("{}/vertices.csv".format(directory), "w", newline="") as file:
         csv_writer = csv.writer(file, delimiter=",")
         csv_writer.writerow(
@@ -43,7 +45,7 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
 
                     for j in range(layer_widths[layer + 1])
 
-                    if neuron_connections is None or abs(n-j) < neuron_connections
+                    if neuron_connections is None or abs(n - j) < neuron_connections
                 ]
                 edges_ = list(
                     itertools.product([first_layer_nodes[n]], connecting_nodes)
@@ -51,6 +53,7 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
 
                 for e in edges_:
                     csv_writer.writerow(e)
+
 
 def latex_file(directory):
     template = """\\documentclass[tikz]{{standalone}}
@@ -61,23 +64,49 @@ def latex_file(directory):
         \\Vertices{{{dir}/vertices.csv}}
         \\Edges{{{dir}/edges.csv}}
     \\end{{tikzpicture}}
-\\end{{document}}""".format(dir=directory)
+\\end{{document}}""".format(
+        dir=directory
+    )
     with open("{}.tex".format(directory), "w") as file:
-        file.write(template) 
+        file.write(template)
 
 
 @click.command()
 @click.argument("layer_widths", nargs=-1, type=int)
-@click.option("--directory", "-d", default="./network", type=click.Path())
-@click.option("--x_separation", "-x", default=2, type=float)
-@click.option("--y_separation", "-y", default=1.5, type=float)
-@click.option("--neuron_connections", "-c", type=int)
-@click.option('--latex', '-l', is_flag=True)
+@click.option(
+    "--directory",
+    "-d",
+    default="./network",
+    type=click.Path(),
+    help="Directory of data files."
+)
+@click.option(
+    "--layer_separation",
+    "-x",
+    default=2,
+    type=float,
+    help="Scaling of distance between layers.",
+)
+@click.option(
+    "--node_separation",
+    "-y",
+    default=1.5,
+    type=float,
+    help="Scaling of distance between nodes.",
+)
+
+# @click.option("--neuron_connections", "-c", type=int)
+@click.option("--latex", "-l", is_flag=True, help="Generate latex file.")
 def network(layer_widths, directory, latex, **kwargs):
+    """Generate data files for visualizing Neural Networks with the LaTeX package tikz-network.
+
+    Input an arbitrary number of LAYER_WIDTHS, the number of nodes for every layer, and csv data files will be created.
+    Latex file is created with the same name as the directory, default is 'network'.
+    """
     if layer_widths:
         os.makedirs(directory, exist_ok=True)
         vertices(layer_widths, directory, **kwargs)
         edges(layer_widths, directory, **kwargs)
+
     if latex:
         latex_file(directory)
-
