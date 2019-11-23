@@ -70,8 +70,8 @@ def latex_file(directory):
     with open("{}.tex".format(directory), "w") as file:
         file.write(template)
 
-
-@click.command()
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+@click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument("layer_widths", nargs=-1, type=int)
 @click.option(
     "--directory",
