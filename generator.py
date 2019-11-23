@@ -52,6 +52,19 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
                 for e in edges_:
                     csv_writer.writerow(e)
 
+def latex_file(directory):
+    template = """\\documentclass[tikz]{{standalone}}
+\\usepackage{{tikz-network}}
+
+\\begin{{document}}
+    \\begin{{tikzpicture}}
+        \\Vertices{{{dir}/vertices.csv}}
+        \\Edges{{{dir}/edges.csv}}
+    \\end{{tikzpicture}}
+\\end{{document}}""".format(dir=directory)
+    with open("{}.tex".format(directory), "w") as file:
+        file.write(template) 
+
 
 @click.command()
 @click.argument("layer_widths", nargs=-1, type=int)
@@ -59,8 +72,12 @@ def edges(layer_widths, directory, neuron_connections=None, **kwargs):
 @click.option("--x_separation", "-x", default=2, type=float)
 @click.option("--y_separation", "-y", default=1.5, type=float)
 @click.option("--neuron_connections", "-c", type=int)
-def network(layer_widths, directory, **kwargs):
+@click.option('--latex', '-l', is_flag=True)
+def network(layer_widths, directory, latex, **kwargs):
     if layer_widths:
         os.makedirs(directory, exist_ok=True)
         vertices(layer_widths, directory, **kwargs)
         edges(layer_widths, directory, **kwargs)
+    if latex:
+        latex_file(directory)
+
