@@ -32,6 +32,8 @@ The interface provides options for customizing the distance between layers (x) a
  
 ```
 # Installation
+Either by pip
 ```bash
-pip install git+https://github.com/epip install git+https://github.com/eliasageby/tikzNNpip install git+https://github.com/eliasageby/tikzNNpip install git+https://github.com/eliasageby/tikzNNageby/tikzNN
+pip install git+https://github.com/eageby/tikzNN
 ```
+or by cloning and installing locally.
